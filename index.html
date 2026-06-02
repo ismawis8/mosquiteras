@@ -120,6 +120,7 @@ tbody tr:hover{background:var(--sur2);}
     <button class="nb" onclick="showPage('campanas',this)">Campañas</button>
     <button class="nb" onclick="showPage('terminos',this)">Términos</button>
     <button class="nb" onclick="showPage('audiencia',this)">Audiencia</button>
+    <button class="nb" onclick="showPage('meta',this)">Meta Ads</button>
     <button class="nb" onclick="showPage('geografico',this)">Geografía</button>
     <button class="nb" onclick="showPage('insights',this)">Insights</button>
   </div>
@@ -531,6 +532,105 @@ tbody tr:hover{background:var(--sur2);}
 </div>
 </div>
 
+<!-- ===== META ADS ===== -->
+<div class="page" id="page-meta">
+<div class="wrap">
+  <div class="pg-title">Meta Ads</div>
+  <div class="pg-sub">Mayo 2026 &middot; 2 campañas activas &middot; Facebook + Instagram</div>
+
+  <div class="ann">📌 Datos disponibles desde mayo 2026. Se irá acumulando el histórico mes a mes.</div>
+
+  <div class="sec">Resumen mayo 2026</div>
+  <div class="mg">
+    <div class="mc"><div class="mc-lbl">Inversión</div><div class="mc-val">377€</div><div class="mc-sub">2 campañas activas</div></div>
+    <div class="mc"><div class="mc-lbl">Valor conversiones</div><div class="mc-val" style="color:#1d9e75;">3.936€</div><div class="mc-sub">8 compras atribuidas</div></div>
+    <div class="mc"><div class="mc-lbl">ROAS</div><div class="mc-val" style="color:#1d9e75;">10,4x</div><div class="mc-sub">Por euro invertido</div></div>
+    <div class="mc"><div class="mc-lbl">Impresiones</div><div class="mc-val">211K</div><div class="mc-sub">Total mes</div></div>
+    <div class="mc"><div class="mc-lbl">Alcance</div><div class="mc-val">121K</div><div class="mc-sub">Personas únicas</div></div>
+    <div class="mc"><div class="mc-lbl">Clics enlace</div><div class="mc-val">13.054</div><div class="mc-sub">CTR 6,18%</div></div>
+    <div class="mc"><div class="mc-lbl">Visitas landing</div><div class="mc-val">11.029</div><div class="mc-sub">0,034€/visita</div></div>
+    <div class="mc"><div class="mc-lbl">CPM</div><div class="mc-val">1,79€</div><div class="mc-sub">Coste por 1.000 impr.</div></div>
+  </div>
+
+  <div class="g2">
+    <div class="cc">
+      <div class="cc-t">Comparativa campañas · Mayo 2026</div>
+      <div class="cc-s">Gasto, alcance y visitas landing por campaña</div>
+      <div class="leg">
+        <div class="li"><div style="width:12px;height:12px;border-radius:2px;background:rgba(55,138,221,0.7);flex-shrink:0;"></div>Gasto (€)</div>
+        <div class="li"><div style="width:12px;height:12px;border-radius:2px;background:rgba(29,158,117,0.7);flex-shrink:0;"></div>Visitas landing</div>
+      </div>
+      <div class="cw" style="height:240px;"><canvas id="metaCampComp" role="img" aria-label="Comparativa campañas Meta"></canvas></div>
+    </div>
+    <div class="cc">
+      <div class="cc-t">Distribución inversión</div>
+      <div class="cc-s">% gasto por campaña</div>
+      <div class="cw" style="height:240px;"><canvas id="metaInvDist" role="img" aria-label="Distribución inversión Meta"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec">Detalle por campaña</div>
+  <div class="tc">
+    <div style="overflow-x:auto;">
+    <table>
+      <thead><tr>
+        <th>Campaña</th><th>Estado</th>
+        <th class="r">Gasto</th><th class="r">Impresiones</th><th class="r">Alcance</th>
+        <th class="r">CTR</th><th class="r">CPC</th><th class="r">CPM</th>
+        <th class="r">Visitas landing</th><th class="r">Coste/visita</th>
+      </tr></thead>
+      <tbody id="metaTbody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="sec">Google Ads vs Meta Ads · Mayo 2026</div>
+  <div class="mg">
+    <div class="mc" style="border-top:3px solid #378add;">
+      <div class="mc-lbl" style="color:#185fa5;">Google Ads · Mayo</div>
+      <div class="mc-val">2.423€</div>
+      <div class="mc-sub">inversión</div>
+      <div style="margin-top:6px;font-size:15px;font-weight:700;color:#1d9e75;">28.259€</div>
+      <div class="mc-sub">valor conv. · ROAS <strong>11,7x</strong></div>
+    </div>
+    <div class="mc" style="border-top:3px solid #4267B2;">
+      <div class="mc-lbl" style="color:#4267B2;">Meta Ads · Mayo</div>
+      <div class="mc-val">377€</div>
+      <div class="mc-sub">inversión</div>
+      <div style="margin-top:6px;font-size:15px;font-weight:700;color:#1d9e75;">3.936€</div>
+      <div class="mc-sub">8 compras · ROAS <strong>10,4x</strong></div>
+    </div>
+    <div class="mc" style="border-top:3px solid #1a1917;">
+      <div class="mc-lbl">Total mayo 2026</div>
+      <div class="mc-val">2.800€</div>
+      <div class="mc-sub">inversión combinada</div>
+      <div style="margin-top:6px;font-size:15px;font-weight:700;color:#1d9e75;">32.195€</div>
+      <div class="mc-sub">valor total · ROAS <strong>11,5x</strong></div>
+    </div>
+  </div>
+
+  <div class="ig">
+    <div class="ic"><div class="ii" style="background:var(--blue-l);">💰</div><div>
+      <div class="ic-t">CPC extraordinariamente bajo: 0,03€</div>
+      <div class="ic-s">Un clic en Meta cuesta 0,029€ vs 0,11€ en Google. Meta genera volumen de tráfico muy barato, ideal para remarketing y reconocimiento de marca.</div>
+    </div></div>
+    <div class="ic"><div class="ii" style="background:var(--green-l);">📊</div><div>
+      <div class="ic-t">CTR del 6,18% — muy por encima de la media</div>
+      <div class="ic-s">La media del sector en Meta Ads para ecommerce es 1-2%. Un CTR de 6% indica creatividades muy relevantes para la audiencia mostrada.</div>
+    </div></div>
+    <div class="ic"><div class="ii" style="background:var(--green-l);">🔁</div><div>
+      <div class="ic-t">Meta ROAS 10,4x · Canal complementario sólido</div>
+      <div class="ic-s">8 compras atribuidas por 3.936€ de valor con 377€ de inversión. Además genera 11K visitas a landing a 0,03€ que alimentan el funnel de Google.</div>
+    </div></div>
+    <div class="ic"><div class="ii" style="background:var(--green-l);">🐱</div><div>
+      <div class="ic-t">Mosquiteras_gatos funciona mejor en Meta que en Google</div>
+      <div class="ic-s">En Google tiene ROAS 4,3x y se planteó pausar. En Meta genera 5.355 visitas a 0,029€/visita — audiencias de dueños de gatos bien segmentadas en Meta.</div>
+    </div></div>
+  </div>
+
+</div>
+</div>
+
 <!-- ===== INSIGHTS ===== -->
 <div class="page" id="page-insights">
 <div class="wrap">
@@ -850,6 +950,57 @@ new Chart(document.getElementById('chartKw'),{type:'bar',data:{labels:['mosquite
 
 
 
+
+
+// --- META ADS ---
+const metaCamps = [
+  {n:'Mosquiteras_gatos',      spend:157.25, impr:101650, reach:58862, ctr:6.40, cpc:0.0242, cpm:1.547, visits:5355, cpv:0.0294},
+  {n:'[MAR] IA Llegan mosquitos', spend:219.86, impr:109553, reach:61931, ctr:5.98, cpc:0.0336, cpm:2.007, visits:5674, cpv:0.0387},
+];
+
+new Chart(document.getElementById('metaCampComp'),{
+  type:'bar',
+  data:{
+    labels: metaCamps.map(c=>c.n),
+    datasets:[
+      {label:'Gasto (€)', data:metaCamps.map(c=>c.spend), backgroundColor:'rgba(55,138,221,0.7)', borderRadius:4},
+      {label:'Visitas landing', data:metaCamps.map(c=>c.visits), backgroundColor:'rgba(29,158,117,0.7)', borderRadius:4},
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:tc,font:{size:11},boxWidth:10}}},
+    scales:{
+      x:{ticks:{color:tc,font:{size:11}}, grid:{display:false}},
+      y:{ticks:{color:tc}, grid:{color:gc}}
+    }
+  }
+});
+
+new Chart(document.getElementById('metaInvDist'),{
+  type:'doughnut',
+  data:{
+    labels:metaCamps.map(c=>c.n),
+    datasets:[{data:metaCamps.map(c=>c.spend), backgroundColor:['#378add','#4267B2'], borderWidth:2, borderColor:'#fff'}]
+  },
+  options:{responsive:true, maintainAspectRatio:false, plugins:{legend:{display:true,position:'bottom',labels:{font:{size:11},color:tc,boxWidth:10}}}, cutout:'60%'}
+});
+
+const metaTb = document.getElementById('metaTbody');
+metaCamps.forEach(c=>{
+  metaTb.innerHTML+=`<tr>
+    <td><strong>${c.n}</strong></td>
+    <td><span class="badge b-g">Activa</span></td>
+    <td class="r">${c.spend.toFixed(2)}€</td>
+    <td class="r">${c.impr.toLocaleString('es-ES')}</td>
+    <td class="r">${c.reach.toLocaleString('es-ES')}</td>
+    <td class="r"><span class="badge b-g">${c.ctr.toFixed(2)}%</span></td>
+    <td class="r">${c.cpc.toFixed(4)}€</td>
+    <td class="r">${c.cpm.toFixed(3)}€</td>
+    <td class="r">${c.visits.toLocaleString('es-ES')}</td>
+    <td class="r">${c.cpv.toFixed(4)}€</td>
+  </tr>`;
+});
 
 // --- GEOGRAFÍA ---
 const geoData = [
