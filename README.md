@@ -1,2 +1,1218 @@
+[index.html.html](https://github.com/user-attachments/files/28505372/index.html.html)
 # mosquiteras
 mosquiteras ads
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>mosquiteras.org · Google Ads Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --bg:#f5f4f1; --sur:#fff; --sur2:#f0efe9; --bor:#e3e1d9;
+  --txt:#1a1917; --txt2:#6b6860; --txt3:#a09d96;
+  --blue:#378add; --blue-l:#e6f1fb; --blue-d:#0c447c;
+  --green:#1d9e75; --green-l:#eaf3de; --green-d:#27500a;
+  --red:#e24b4a; --red-l:#fcebeb; --red-d:#a32d2d;
+  --amber:#ef9f27; --amber-l:#faeeda; --amber-d:#633806;
+  --r:10px; --rs:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);font-family:'Segoe UI',system-ui,sans-serif;color:var(--txt);font-size:14px;line-height:1.5;}
+
+.hdr{background:var(--sur);border-bottom:1px solid var(--bor);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:54px;position:sticky;top:0;z-index:100;}
+.logo{font-size:15px;font-weight:700;letter-spacing:-.3px;}
+.logo span{color:var(--red);}
+.hdr-badge{font-size:11px;background:var(--sur2);border:1px solid var(--bor);border-radius:100px;padding:2px 10px;color:var(--txt2);}
+.nav{display:flex;gap:3px;}
+.nb{background:none;border:none;padding:6px 13px;border-radius:var(--rs);font-size:13px;color:var(--txt2);cursor:pointer;transition:all .15s;}
+.nb:hover{background:var(--sur2);color:var(--txt);}
+.nb.on{background:var(--txt);color:#fff;}
+
+.wrap{max-width:1300px;margin:0 auto;padding:26px 28px;}
+.page{display:none;}.page.on{display:block;}
+
+.pg-title{font-size:20px;font-weight:700;letter-spacing:-.4px;margin-bottom:3px;}
+.pg-sub{font-size:13px;color:var(--txt2);margin-bottom:22px;}
+.sec{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--txt3);margin-bottom:11px;margin-top:20px;}
+
+/* METRIC CARDS */
+.mg{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:22px;}
+.mc{background:var(--sur2);border-radius:var(--rs);padding:14px 16px;}
+.mc-lbl{font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;}
+.mc-val{font-size:24px;font-weight:700;letter-spacing:-.5px;line-height:1;margin-bottom:5px;}
+.mc-sub{font-size:12px;color:var(--txt2);}
+.mc-delta{font-size:12px;}
+.up-g{color:var(--green);} .up-b{color:var(--red);} .dn-g{color:var(--green);} .dn-b{color:var(--red);}
+
+/* CHART CARDS */
+.cc{background:var(--sur);border:1px solid var(--bor);border-radius:var(--r);padding:18px 20px;margin-bottom:14px;}
+.cc-t{font-size:13px;font-weight:600;margin-bottom:3px;}
+.cc-s{font-size:12px;color:var(--txt3);margin-bottom:14px;}
+.cw{position:relative;width:100%;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
+
+/* LEGEND */
+.leg{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px;}
+.li{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--txt2);}
+.ld{width:22px;height:3px;border-radius:2px;flex-shrink:0;}
+
+/* YEAR SELECTOR */
+.ys{display:flex;gap:6px;margin-bottom:18px;}
+.yt{background:var(--sur);border:1px solid var(--bor);border-radius:var(--rs);padding:5px 14px;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer;}
+.yt.on{background:var(--txt);color:#fff;border-color:var(--txt);}
+
+/* ANNOTATION */
+.ann{background:var(--amber-l);border:1px solid #f5c47a;border-radius:var(--rs);padding:9px 13px;font-size:12px;color:var(--amber-d);margin-bottom:16px;}
+
+/* INSIGHT CARDS */
+.ig{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-bottom:20px;}
+.ic{background:var(--sur);border:1px solid var(--bor);border-radius:var(--r);padding:14px 16px;display:flex;gap:11px;}
+.ii{width:30px;height:30px;border-radius:var(--rs);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.ic-t{font-size:13px;font-weight:600;margin-bottom:3px;}
+.ic-s{font-size:12px;color:var(--txt2);line-height:1.6;}
+
+/* TABLE */
+.tc{background:var(--sur);border:1px solid var(--bor);border-radius:var(--r);overflow:hidden;margin-bottom:18px;}
+.th2{padding:14px 18px;border-bottom:1px solid var(--bor);display:flex;align-items:center;justify-content:space-between;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{padding:9px 15px;text-align:left;font-size:11px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.05em;background:var(--sur2);border-bottom:1px solid var(--bor);}
+th.r,td.r{text-align:right;}
+tbody td{padding:10px 15px;border-bottom:1px solid var(--bor);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover{background:var(--sur2);}
+
+/* BADGE */
+.badge{display:inline-flex;align-items:center;font-size:11px;padding:2px 8px;border-radius:100px;font-weight:500;}
+.b-g{background:var(--green-l);color:var(--green-d);}
+.b-r{background:var(--red-l);color:var(--red-d);}
+.b-a{background:var(--amber-l);color:var(--amber-d);}
+.b-b{background:var(--blue-l);color:var(--blue-d);}
+.b-n{background:var(--sur2);color:var(--txt2);}
+
+/* BAR */
+.bar-bg{height:4px;background:var(--sur2);border-radius:2px;overflow:hidden;margin-top:4px;}
+.bar-f{height:100%;border-radius:2px;}
+
+/* MONTH TABLE special */
+.mt-val{font-size:13px;font-weight:600;}
+.mt-sub{font-size:11px;color:var(--txt3);}
+.highlight{background:#fffbf0;}
+
+/* METRIC TOGGLE */
+.mtog{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap;}
+.mt{background:var(--sur);border:1px solid var(--bor);border-radius:var(--rs);padding:5px 12px;font-size:12px;color:var(--txt2);cursor:pointer;}
+.mt.on{border-color:var(--blue);background:var(--blue-l);color:var(--blue-d);font-weight:500;}
+
+@media(max-width:900px){.g2,.g3{grid-template-columns:1fr;}.wrap{padding:18px 14px;}.hdr{padding:0 14px;}.mg{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div style="display:flex;align-items:center;gap:14px;">
+    <div class="logo">mosquiteras<span>.org</span></div>
+    <div class="hdr-badge">Google Ads · 2024–2026</div>
+  </div>
+  <div class="nav">
+    <button class="nb on" onclick="showPage('comparativa',this)">Comparativa</button>
+    <button class="nb" onclick="showPage('vs2026',this)">2026 vs años ant.</button>
+    <button class="nb" onclick="showPage('mensual',this)">Mes a mes</button>
+    <button class="nb" onclick="showPage('campanas',this)">Campañas</button>
+    <button class="nb" onclick="showPage('terminos',this)">Términos</button>
+    <button class="nb" onclick="showPage('audiencia',this)">Audiencia</button>
+    <button class="nb" onclick="showPage('geografico',this)">Geografía</button>
+    <button class="nb" onclick="showPage('insights',this)">Insights</button>
+  </div>
+</div>
+
+<!-- ===== COMPARATIVA INTERANUAL ===== -->
+<div class="page on" id="page-comparativa">
+<div class="wrap">
+  <div class="pg-title">Comparativa interanual</div>
+  <div class="pg-sub">Los 12 meses del año superpuestos · 2024 vs 2025 vs 2026</div>
+
+  <div class="sec">Totales por año</div>
+  <div class="mg">
+    <div class="mc"><div class="mc-lbl">Inversión 2024</div><div class="mc-val">13.944€</div><div class="mc-sub">Año completo</div></div>
+    <div class="mc"><div class="mc-lbl">Inversión 2025</div><div class="mc-val">12.142€</div><div class="mc-delta dn-g">↓ 13% vs 2024</div></div>
+    <div class="mc"><div class="mc-lbl">Inversión 2026</div><div class="mc-val">6.356€</div><div class="mc-sub">Ene–May (5 meses)</div></div>
+    <div class="mc"><div class="mc-lbl">ROAS 2024</div><div class="mc-val" style="color:var(--blue);">7,7x</div><div class="mc-sub">107.416€ valor</div></div>
+    <div class="mc"><div class="mc-lbl">ROAS 2025</div><div class="mc-val" style="color:var(--green);">8,8x</div><div class="mc-delta up-g">↑ vs 2024</div></div>
+    <div class="mc"><div class="mc-lbl">ROAS 2026</div><div class="mc-val" style="color:var(--green);">9,8x</div><div class="mc-delta up-g">↑ mejor año</div></div>
+  </div>
+
+  <div class="ann">⚠️ Septiembre 2025: colapso casi total (2.027 impresiones, 2,33€ gastados). Las campañas estuvieron prácticamente paradas ese mes.</div>
+
+  <div class="mtog" id="metricToggle">
+    <button class="mt on" onclick="switchMetric('valor',this)">Valor conversiones</button>
+    <button class="mt" onclick="switchMetric('coste',this)">Coste</button>
+    <button class="mt" onclick="switchMetric('roas',this)">ROAS</button>
+    <button class="mt" onclick="switchMetric('impr',this)">Impresiones</button>
+    <button class="mt" onclick="switchMetric('conv',this)">Conversiones</button>
+  </div>
+
+  <div class="cc">
+    <div class="cc-t" id="mainChartTitle">Valor de conversiones por mes</div>
+    <div class="cc-s">Comparativa 2024 · 2025 · 2026 — mismo mes, distintos años</div>
+    <div class="leg">
+      <div class="li"><div class="ld" style="background:#378add;"></div>2024</div>
+      <div class="li"><div class="ld" style="background:#1d9e75;"></div>2025</div>
+      <div class="li"><div class="ld" style="background:#e24b4a; border-top: 2px dashed #e24b4a; background:none;height:0;width:22px;"></div>2026</div>
+    </div>
+    <div class="cw" style="height:300px;"><canvas id="chartMain" role="img" aria-label="Comparativa interanual por métrica seleccionada"></canvas></div>
+  </div>
+
+  <div class="g2">
+    <div class="cc">
+      <div class="cc-t">Coste mensual comparado</div>
+      <div class="cc-s">Inversión mes a mes por año</div>
+      <div class="cw" style="height:220px;"><canvas id="chartCosteComp" role="img" aria-label="Coste mensual comparado"></canvas></div>
+    </div>
+    <div class="cc">
+      <div class="cc-t">ROAS mensual comparado</div>
+      <div class="cc-s">Retorno por euro invertido cada mes</div>
+      <div class="cw" style="height:220px;"><canvas id="chartRoasComp" role="img" aria-label="ROAS mensual comparado"></canvas></div>
+    </div>
+  </div>
+
+  <div class="cc">
+    <div class="cc-t">Conversiones mensuales comparadas</div>
+    <div class="cc-s">Número de conversiones por mes · 2024 vs 2025 vs 2026</div>
+    <div class="cw" style="height:220px;"><canvas id="chartConvComp" role="img" aria-label="Conversiones mensuales comparadas"></canvas></div>
+  </div>
+
+</div>
+</div>
+
+<!-- ===== 2026 VS AÑOS ANTERIORES ===== -->
+<div class="page" id="page-vs2026">
+<div class="wrap">
+  <div class="pg-title">2026 vs 2024 y 2025</div>
+  <div class="pg-sub">Comparación directa · Solo los meses con datos en 2026 (Ene&ndash;May)</div>
+
+  <div class="sec">Resumen acumulado Ene&ndash;May</div>
+  <div class="mg" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));max-width:900px;">
+    <div class="mc" style="border-top:3px solid #378add;">
+      <div class="mc-lbl" style="color:#185fa5;">2024 &middot; Ene&ndash;May</div>
+      <div class="mc-val">11.282&euro;</div>
+      <div class="mc-sub">inversi&oacute;n</div>
+      <div style="margin-top:6px;font-size:15px;font-weight:700;color:var(--txt);">61.111&euro;</div>
+      <div class="mc-sub">valor &middot; ROAS <strong>5,4x</strong></div>
+    </div>
+    <div class="mc" style="border-top:3px solid #1d9e75;">
+      <div class="mc-lbl" style="color:#27500a;">2025 &middot; Ene&ndash;May</div>
+      <div class="mc-val">6.262&euro;</div>
+      <div class="mc-sub">inversi&oacute;n</div>
+      <div style="margin-top:6px;font-size:15px;font-weight:700;color:var(--txt);">35.100&euro;</div>
+      <div class="mc-sub">valor &middot; ROAS <strong>5,6x</strong></div>
+    </div>
+    <div class="mc" style="border-top:3px solid #e24b4a;">
+      <div class="mc-lbl" style="color:#a32d2d;">2026 &middot; Ene&ndash;May</div>
+      <div class="mc-val">6.356&euro;</div>
+      <div class="mc-sub">inversi&oacute;n</div>
+      <div style="margin-top:6px;font-size:15px;font-weight:700;color:#1d9e75;">62.410&euro;</div>
+      <div class="mc-sub">valor &middot; ROAS <strong style="color:#1d9e75;">9,8x</strong></div>
+    </div>
+  </div>
+
+  <div class="cc">
+    <div class="cc-t">Valor de conversiones &middot; Ene&ndash;May comparado</div>
+    <div class="cc-s">Mismo per&iacute;odo, distintos a&ntilde;os &mdash; barras agrupadas por mes</div>
+    <div class="leg">
+      <div class="li"><div style="width:12px;height:12px;border-radius:2px;background:#378add;flex-shrink:0;"></div>2024</div>
+      <div class="li"><div style="width:12px;height:12px;border-radius:2px;background:#1d9e75;flex-shrink:0;"></div>2025</div>
+      <div class="li"><div style="width:12px;height:12px;border-radius:2px;background:#e24b4a;flex-shrink:0;"></div>2026</div>
+    </div>
+    <div class="cw" style="height:280px;"><canvas id="vs_valor" role="img" aria-label="Valor conversiones comparado ene-may 2024 vs 2025 vs 2026"></canvas></div>
+  </div>
+
+  <div class="g2">
+    <div class="cc">
+      <div class="cc-t">ROAS mensual &middot; Ene&ndash;May</div>
+      <div class="cc-s">Retorno por euro &middot; los tres a&ntilde;os</div>
+      <div class="cw" style="height:240px;"><canvas id="vs_roas" role="img" aria-label="ROAS comparado ene-may"></canvas></div>
+    </div>
+    <div class="cc">
+      <div class="cc-t">Inversi&oacute;n mensual &middot; Ene&ndash;May</div>
+      <div class="cc-s">Coste total por mes &middot; los tres a&ntilde;os</div>
+      <div class="cw" style="height:240px;"><canvas id="vs_coste" role="img" aria-label="Coste comparado ene-may"></canvas></div>
+    </div>
+  </div>
+
+  <div class="cc">
+    <div class="cc-t">Conversiones mensuales &middot; Ene&ndash;May</div>
+    <div class="cc-s">N&uacute;mero de conversiones por mes &middot; los tres a&ntilde;os</div>
+    <div class="cw" style="height:220px;"><canvas id="vs_conv" role="img" aria-label="Conversiones comparadas ene-may"></canvas></div>
+  </div>
+
+  <div class="sec">Tabla detalle mes a mes</div>
+  <div class="tc">
+    <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>Mes</th>
+          <th class="r" style="color:#185fa5;">Valor 2024</th>
+          <th class="r" style="color:#27500a;">Valor 2025</th>
+          <th class="r" style="color:#a32d2d;">Valor 2026</th>
+          <th class="r" style="color:#185fa5;">ROAS 2024</th>
+          <th class="r" style="color:#27500a;">ROAS 2025</th>
+          <th class="r" style="color:#a32d2d;">ROAS 2026</th>
+          <th class="r">Coste 2024</th>
+          <th class="r">Coste 2025</th>
+          <th class="r">Coste 2026</th>
+        </tr>
+      </thead>
+      <tbody id="vs_tbody"></tbody>
+    </table>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ===== MES A MES ===== -->
+<div class="page" id="page-mensual">
+<div class="wrap">
+  <div class="pg-title">Detalle mes a mes</div>
+  <div class="pg-sub">Todas las métricas por mes · Ene 2024 – May 2026</div>
+
+  <div class="ys" id="yearSel">
+    <button class="yt on" onclick="filterYear('todos',this)">Todos</button>
+    <button class="yt" onclick="filterYear(2024,this)">2024</button>
+    <button class="yt" onclick="filterYear(2025,this)">2025</button>
+    <button class="yt" onclick="filterYear(2026,this)">2026</button>
+  </div>
+
+  <div class="tc">
+    <div class="th2">
+      <div style="font-size:13px;font-weight:600;">Tabla mensual completa</div>
+      <div style="font-size:12px;color:var(--txt3);">Ordenado cronológicamente</div>
+    </div>
+    <div style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>Mes</th>
+          <th class="r">Inversión</th>
+          <th class="r">Valor conv.</th>
+          <th class="r">ROAS</th>
+          <th class="r">Conversiones</th>
+          <th class="r">Impresiones</th>
+          <th class="r">Clics</th>
+          <th>Tendencia</th>
+        </tr>
+      </thead>
+      <tbody id="monthTableBody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="cc">
+      <div class="cc-t">Evolución del ROAS</div>
+      <div class="cc-s">Mes a mes cronológico · Ene 2024 – May 2026</div>
+      <div class="cw" style="height:220px;"><canvas id="chartRoasMes" role="img" aria-label="ROAS mes a mes"></canvas></div>
+    </div>
+    <div class="cc">
+      <div class="cc-t">Estacionalidad del valor</div>
+      <div class="cc-s">Valor de conversiones cronológico</div>
+      <div class="cw" style="height:220px;"><canvas id="chartValorMes" role="img" aria-label="Valor conversiones mes a mes"></canvas></div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ===== CAMPAÑAS ===== -->
+<div class="page" id="page-campanas">
+<div class="wrap">
+  <div class="pg-title">Campañas activas 2026</div>
+  <div class="pg-sub">Rendimiento real Ene&ndash;May 2026 &middot; Solo campañas con conversiones</div>
+
+  <div class="mg">
+    <div class="mc"><div class="mc-lbl">Inversión total</div><div class="mc-val">6.356€</div><div class="mc-sub">7 campañas activas</div></div>
+    <div class="mc"><div class="mc-lbl">Valor conversiones</div><div class="mc-val">62.410€</div><div class="mc-sub">Atribuido Google Ads</div></div>
+    <div class="mc"><div class="mc-lbl">ROAS global</div><div class="mc-val" style="color:#1d9e75;">9,8x</div><div class="mc-sub">Mejor año hasta ahora</div></div>
+    <div class="mc"><div class="mc-lbl">Conversiones</div><div class="mc-val">423</div><div class="mc-sub">Total 5 meses</div></div>
+    <div class="mc"><div class="mc-lbl">CPA medio</div><div class="mc-val">15€</div><div class="mc-sub">Coste por conversión</div></div>
+  </div>
+
+  <div class="sec">Acumulado Ene&ndash;May 2026 por campaña</div>
+  <div class="tc">
+    <div class="th2">
+      <div style="font-size:13px;font-weight:600;">Campañas con rendimiento &middot; Ordenadas por valor &darr;</div>
+    </div>
+    <div style="overflow-x:auto;">
+    <table>
+      <thead><tr>
+        <th>Campaña</th><th>Tipo</th><th class="r">Coste</th><th class="r">Valor conv.</th>
+        <th class="r">Conv.</th><th class="r">ROAS</th><th class="r">CPA</th><th class="r">Clics</th><th>Eficiencia</th>
+      </tr></thead>
+      <tbody id="campTbody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="cc">
+      <div class="cc-t">ROAS por campaña &middot; Ene&ndash;May 2026</div>
+      <div class="cc-s">Verde &ge;7x &middot; Azul &ge;4x &middot; Rojo &lt;4x</div>
+      <div class="cw" style="height:260px;"><canvas id="chartRoasCamp" role="img" aria-label="ROAS por campaña 2026"></canvas></div>
+    </div>
+    <div class="cc">
+      <div class="cc-t">Distribución inversión &middot; Ene&ndash;May 2026</div>
+      <div class="cc-s">% del gasto total por campaña</div>
+      <div class="cw" style="height:260px;"><canvas id="chartInvCamp" role="img" aria-label="Distribución inversión 2026"></canvas></div>
+    </div>
+  </div>
+
+  <div class="cc">
+    <div class="cc-t">Coste vs Valor &middot; Ene&ndash;May 2026</div>
+    <div class="cc-s">Por cada euro invertido cu&aacute;nto genera cada campa&ntilde;a</div>
+    <div class="leg">
+      <div class="li"><div style="width:12px;height:12px;border-radius:2px;background:rgba(55,138,221,0.65);flex-shrink:0;"></div>Coste</div>
+      <div class="li"><div style="width:12px;height:12px;border-radius:2px;background:rgba(29,158,117,0.65);flex-shrink:0;"></div>Valor conversiones</div>
+    </div>
+    <div class="cw" style="height:260px;"><canvas id="chartCampCosteValor" role="img" aria-label="Coste vs valor por campaña 2026"></canvas></div>
+  </div>
+
+  <div class="sec">Evoluci&oacute;n mensual por campa&ntilde;a &middot; Valor de conversiones</div>
+  <div class="cc">
+    <div class="cc-t">Valor mensual por campa&ntilde;a</div>
+    <div class="cc-s">Ene&ndash;May 2026 &middot; L&iacute;nea por campa&ntilde;a</div>
+    <div class="cw" style="height:280px;"><canvas id="chartCampEvol" role="img" aria-label="Evolución mensual por campaña"></canvas></div>
+  </div>
+
+</div>
+</div>
+
+<!-- ===== TÉRMINOS DE BÚSQUEDA ===== -->
+<div class="page" id="page-terminos">
+<div class="wrap">
+  <div class="pg-title">Términos de búsqueda 2026</div>
+  <div class="pg-sub">Ene&ndash;May 2026 &middot; Solo campañas de búsqueda activas</div>
+
+  <div class="mg">
+    <div class="mc"><div class="mc-lbl">Términos únicos</div><div class="mc-val">35</div><div class="mc-sub">Con gasto registrado</div></div>
+    <div class="mc"><div class="mc-lbl">Convierten</div><div class="mc-val" style="color:#1d9e75;">15</div><div class="mc-sub">Con valor atribuido</div></div>
+    <div class="mc"><div class="mc-lbl">No convierten &gt;10€</div><div class="mc-val" style="color:#e24b4a;">7</div><div class="mc-sub">Candidatos a negativo</div></div>
+    <div class="mc"><div class="mc-lbl">Mejor término</div><div class="mc-val" style="font-size:14px;">mosquiteras org</div><div class="mc-sub">ROAS 107x · 14.933€</div></div>
+  </div>
+
+  <div class="g2">
+    <div class="cc">
+      <div class="cc-t">Top 12 por coste &middot; 2026</div>
+      <div class="cc-s">Verde = convierte &middot; Rojo = no convierte</div>
+      <div class="cw" style="height:340px;"><canvas id="chartTermCoste" role="img" aria-label="Top términos por coste"></canvas></div>
+    </div>
+    <div class="cc">
+      <div class="cc-t">Top 10 que convierten por valor</div>
+      <div class="cc-s">Ordenados por valor de conversión total</div>
+      <div class="cw" style="height:340px;"><canvas id="chartTermValor" role="img" aria-label="Top términos por valor conversión"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sec">Términos que convierten &middot; Detalle completo</div>
+  <div class="tc">
+    <div style="overflow-x:auto;">
+    <table>
+      <thead><tr>
+        <th>Término</th><th class="r">Coste</th><th class="r">Conv.</th>
+        <th class="r">Valor</th><th class="r">ROAS</th><th class="r">CPA</th><th class="r">Clics</th><th>Rendimiento</th>
+      </tr></thead>
+      <tbody id="termConvTbody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="sec">Candidatos a palabra negativa &middot; Gasto sin conversiones</div>
+  <div class="ann" style="background:var(--red-l);border-color:#f09595;color:var(--red-d);">
+    ⚠️ Estos términos han consumido presupuesto sin generar conversiones. Añadirlos como negativos liberaría ~115€/mes para términos rentables.
+  </div>
+  <div class="tc">
+    <div style="overflow-x:auto;">
+    <table>
+      <thead><tr><th>Término</th><th class="r">Coste gastado</th><th class="r">Clics</th><th class="r">Conversiones</th><th>Acción recomendada</th></tr></thead>
+      <tbody id="termNegTbody"></tbody>
+    </table>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ===== AUDIENCIA ===== -->
+<div class="page" id="page-audiencia">
+<div class="wrap">
+  <div class="pg-title">Audiencia y comportamiento</div>
+  <div class="pg-sub">Demografía · Horario · Día de la semana · Top keywords</div>
+  <div class="g3">
+    <div class="cc"><div class="cc-t">Edad</div><div class="cc-s">% impresiones</div><div class="cw" style="height:200px;"><canvas id="chartEdad" role="img" aria-label="Impresiones por edad"></canvas></div></div>
+    <div class="cc"><div class="cc-t">Sexo</div><div class="cc-s">% impresiones conocidas</div><div class="cw" style="height:200px;"><canvas id="chartSexo" role="img" aria-label="Impresiones por sexo"></canvas></div></div>
+    <div class="cc"><div class="cc-t">Día de la semana</div><div class="cc-s">Impresiones totales</div><div class="cw" style="height:200px;"><canvas id="chartDia" role="img" aria-label="Impresiones por día"></canvas></div></div>
+  </div>
+  <div class="cc"><div class="cc-t">Distribución horaria</div><div class="cc-s">Pico tarde: 17h–23h</div><div class="cw" style="height:200px;"><canvas id="chartHora" role="img" aria-label="Impresiones por hora"></canvas></div></div>
+  <div class="cc"><div class="cc-t">Top 15 términos de búsqueda</div><div class="cc-s">Por inversión acumulada</div><div class="cw" style="height:300px;"><canvas id="chartKw" role="img" aria-label="Top keywords"></canvas></div></div>
+</div>
+</div>
+
+<!-- ===== GEOGRAFÍA ===== -->
+<div class="page" id="page-geografico">
+<div class="wrap">
+  <div class="pg-title">Perfil geográfico del comprador</div>
+  <div class="pg-sub">Ene&ndash;May 2026 &middot; Conversiones y valor por región</div>
+
+  <div class="mg">
+    <div class="mc"><div class="mc-lbl">Regiones con compras</div><div class="mc-val">668</div><div class="mc-sub">Distintas regiones</div></div>
+    <div class="mc"><div class="mc-lbl">Top región</div><div class="mc-val" style="font-size:16px;">Madrid</div><div class="mc-sub">85 conv · 11.556€</div></div>
+    <div class="mc"><div class="mc-lbl">2ª región</div><div class="mc-val" style="font-size:16px;">Cataluña</div><div class="mc-sub">65,5 conv · 10.271€</div></div>
+    <div class="mc"><div class="mc-lbl">ROAS sorpresa</div><div class="mc-val" style="color:#1d9e75;">Castilla-LM</div><div class="mc-sub">ROAS 92,9x con 8,91€</div></div>
+  </div>
+
+  <div class="ann">💡 Madrid y Cataluña concentran el 35% del valor total. Pero regiones como Burgos (ROAS 61x), Huesca (51x) o Castilla-La Mancha (92x) tienen tickets medios altísimos con inversión mínima.</div>
+
+  <div class="g2">
+    <div class="cc">
+      <div class="cc-t">Top 15 regiones por valor de conversiones</div>
+      <div class="cc-s">Ene&ndash;May 2026 &middot; Valor total atribuido</div>
+      <div class="cw" style="height:380px;"><canvas id="chartGeoValor" role="img" aria-label="Top regiones por valor"></canvas></div>
+    </div>
+    <div class="cc">
+      <div class="cc-t">Top 15 regiones por ROAS</div>
+      <div class="cc-s">Regiones con mejor retorno por euro invertido</div>
+      <div class="cw" style="height:380px;"><canvas id="chartGeoRoas" role="img" aria-label="Top regiones por ROAS"></canvas></div>
+    </div>
+  </div>
+
+  <div class="cc">
+    <div class="cc-t">Evolución mensual · Top 6 regiones</div>
+    <div class="cc-s">Valor de conversiones mes a mes &middot; Ene&ndash;May 2026</div>
+    <div class="leg" id="geoLegend"></div>
+    <div class="cw" style="height:280px;"><canvas id="chartGeoEvol" role="img" aria-label="Evolución mensual por región"></canvas></div>
+  </div>
+
+  <div class="sec">Ranking completo · Top 25 regiones</div>
+  <div class="tc">
+    <div style="overflow-x:auto;">
+    <table>
+      <thead><tr>
+        <th>Región</th>
+        <th class="r">Conv.</th><th class="r">Valor</th>
+        <th class="r">Coste</th><th class="r">ROAS</th>
+        <th class="r">Ticket medio</th><th class="r">Clics</th>
+        <th>Volumen</th>
+      </tr></thead>
+      <tbody id="geoTbody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="sec">Hallazgos clave</div>
+  <div class="ig">
+    <div class="ic"><div class="ii" style="background:var(--blue-l);">🏙️</div><div>
+      <div class="ic-t">Madrid + Cataluña = 35% del valor</div>
+      <div class="ic-s">11.556€ y 10.271€ respectivamente. Son los mercados principales por volumen pero no por eficiencia — hay regiones más rentables.</div>
+    </div></div>
+    <div class="ic"><div class="ii" style="background:var(--green-l);">⭐</div><div>
+      <div class="ic-t">Regiones sorpresa de alto ROAS</div>
+      <div class="ic-s">Castilla-La Mancha (92x), Burgos (61x), Huesca (51x) y Navarra (19x) convierten con tickets muy altos y poca competencia. Oportunidad de subir inversión específica.</div>
+    </div></div>
+    <div class="ic"><div class="ii" style="background:var(--green-l);">📈</div><div>
+      <div class="ic-t">Madrid y Cataluña despegan en mayo</div>
+      <div class="ic-s">Madrid pasa de 936€ en febrero a 5.209€ en mayo. Cataluña de 536€ a 5.125€. La temporada alta impacta claramente en las grandes ciudades.</div>
+    </div></div>
+    <div class="ic"><div class="ii" style="background:var(--amber-l);">🗺️</div><div>
+      <div class="ic-t">Norte peninsular activo</div>
+      <div class="ic-s">Guipúzcoa (ROAS 17x), Girona (16x), Navarra (19x) y Pontevedra (10x) muestran demanda sólida en el norte. Son mercados infrainvertidos con buen retorno.</div>
+    </div></div>
+  </div>
+
+</div>
+</div>
+
+<!-- ===== INSIGHTS ===== -->
+<div class="page" id="page-insights">
+<div class="wrap">
+  <div class="pg-title">Conclusiones y recomendaciones</div>
+  <div class="pg-sub">Análisis estratégico · Ene 2024 – May 2026</div>
+
+  <div class="sec">Lo que está funcionando</div>
+  <div class="ig">
+    <div class="ic"><div class="ii" style="background:var(--green-l);">📈</div><div><div class="ic-t">ROAS mejora cada año</div><div class="ic-s">7,7x (2024) → 8,8x (2025) → 9,8x (2026). La eficiencia sube consistentemente. El CPC ha bajado de 0,18€ a 0,05€ en PMAX.</div></div></div>
+    <div class="ic"><div class="ii" style="background:var(--green-l);">🏷️</div><div><div class="ic-t">RB - Brand: ROAS histórico 7,2x</div><div class="ic-s">Con solo 5.975€ invertidos generó 42.950€. En marzo 2026 alcanzó 80x. La campaña más eficiente y la más infrafinanciada.</div></div></div>
+    <div class="ic"><div class="ii" style="background:var(--green-l);">📅</div><div><div class="ic-t">Estacionalidad muy predecible</div><div class="ic-s">Q2 (abr–jun) siempre es el pico. En 2025 junio generó 40.721€ de valor. Permite planificar presupuesto con precisión.</div></div></div>
+    <div class="ic"><div class="ii" style="background:var(--blue-l);">🚀</div><div><div class="ic-t">2026 arranca mejor que 2024 y 2025</div><div class="ic-s">Ene–May 2026: 62.410€ de valor vs 61.111€ en los mismos 5 meses de 2024 y solo 35.100€ en 2025.</div></div></div>
+  </div>
+
+  <div class="sec">Problemas detectados</div>
+  <div class="ig">
+    <div class="ic"><div class="ii" style="background:var(--red-l);">💥</div><div><div class="ic-t">Colapso Q1 2025 — ROAS 1,5x</div><div class="ic-s">Enero-marzo 2025 generaron apenas 3.574€ de valor con 2.111€ invertidos. El mismo período en 2024 rindió 17.057€. Hay que entender qué pasó.</div></div></div>
+    <div class="ic"><div class="ii" style="background:var(--red-l);">⚠️</div><div><div class="ic-t">Sep 2025: campañas casi paradas</div><div class="ic-s">Solo 2.033€ gastados, 0 conversiones. Probablemente una pausa deliberada o un problema técnico. Costó oportunidades en temporada de salida.</div></div></div>
+    <div class="ic"><div class="ii" style="background:var(--amber-l);">👁️</div><div><div class="ic-t">Cuota de impresiones &lt;10%</div><div class="ic-s">Cortinadecor y Amazon tienen 37–40%. La escalada de presupuesto de 2026 va en buena dirección pero queda mucho margen.</div></div></div>
+    <div class="ic"><div class="ii" style="background:var(--amber-l);">🛒</div><div><div class="ic-t">Shopping y Remarketing sin explotar</div><div class="ic-s">Shopping se probó con 148€ y se pausó. Remarketing pausado. Son dos formatos con alto potencial sin desarrollar.</div></div></div>
+  </div>
+
+  <div class="sec">Plan de acción</div>
+  <div class="tc">
+    <table>
+      <thead><tr><th>Prioridad</th><th>Acción</th><th>Impacto</th><th>Dificultad</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge b-r">🔴 Alta</span></td><td>Subir presupuesto RB - Brand · no limitar</td><td>ROAS 80x. ROI casi garantizado</td><td><span class="badge b-g">Fácil</span></td></tr>
+        <tr><td><span class="badge b-r">🔴 Alta</span></td><td>Relanzar Shopping con catálogo completo</td><td>Captura intención visual de compra</td><td><span class="badge b-a">Media</span></td></tr>
+        <tr><td><span class="badge b-a">🟡 Media</span></td><td>Investigar caída Q1 2025 vs Q1 2024</td><td>Evitar repetir en Q1 2027</td><td><span class="badge b-g">Fácil</span></td></tr>
+        <tr><td><span class="badge b-a">🟡 Media</span></td><td>Reasignar presupuesto PMAX general → específico</td><td>Mejor ROAS con misma inversión</td><td><span class="badge b-g">Fácil</span></td></tr>
+        <tr><td><span class="badge b-a">🟡 Media</span></td><td>Activar Remarketing con visitantes recientes</td><td>CPL bajo, alta intención</td><td><span class="badge b-a">Media</span></td></tr>
+        <tr><td><span class="badge b-g">🟢 Baja</span></td><td>Ajuste puja +20% en franja 17h–23h</td><td>Mayor visibilidad en horas pico</td><td><span class="badge b-g">Fácil</span></td></tr>
+        <tr><td><span class="badge b-g">🟢 Baja</span></td><td>Pausar Mosquiteras_gatos definitivamente</td><td>Libera 150€/mes para mejor uso</td><td><span class="badge b-g">Fácil</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<script>
+const MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const gc = 'rgba(0,0,0,0.05)';
+const tc = '#a09d96';
+
+const D = {
+  coste: {
+    2024:[511.97,725.33,1270.28,2139.49,2635.34,2891.62,1696.4,920.3,490.95,325.45,221.59,114.8],
+    2025:[311,670.6,1129.18,1302.39,1749.18,2334.39,2944.13,1032.47,2.33,75.21,276.01,315.59],
+    2026:[310.67,607.25,1280.51,1735.23,2422.62,null,null,null,null,null,null,null]
+  },
+  valor: {
+    2024:[3755.94,4644.62,8657.08,20057.79,23996.1,23905.23,9703.69,5531.68,4951.17,1323.77,152.86,736.04],
+    2025:[300.68,896.24,2376.65,10695.19,21832.16,40721.48,21617.45,6717.89,0,108.65,654.78,639.9],
+    2026:[2462.26,4021.58,11500.31,16167.73,28258.64,null,null,null,null,null,null,null]
+  },
+  roas: {
+    2024:[7.34,6.4,6.82,9.38,9.11,8.27,5.72,6.01,10.08,4.07,0.69,6.41],
+    2025:[0.97,1.34,2.1,8.21,12.48,17.44,7.34,6.51,0,1.44,2.37,2.03],
+    2026:[7.93,6.62,8.98,9.32,11.66,null,null,null,null,null,null,null]
+  },
+  impr: {
+    2024:[192859,260860,517099,482966,605996,906135,612817,307642,144304,115684,82764,47371],
+    2025:[105187,181596,146543,204405,342633,634975,1197964,954447,2027,11772,119589,198479],
+    2026:[154663,297742,478597,350703,290277,null,null,null,null,null,null,null]
+  },
+  conv: {
+    2024:[27.77,35.99,64,123.99,166.97,193.97,77.02,39,20.98,10,2,5],
+    2025:[5,12,19,54,151.75,282.71,172.73,55.8,0,1,7,9],
+    2026:[19,33,61.53,120.26,189.44,null,null,null,null,null,null,null]
+  }
+};
+
+const labels = {
+  valor: 'Valor de conversiones por mes',
+  coste: 'Coste mensual',
+  roas: 'ROAS mensual',
+  impr: 'Impresiones mensuales',
+  conv: 'Conversiones mensuales'
+};
+
+function fmt(v, metric) {
+  if(v===null||v===undefined) return '—';
+  if(metric==='roas') return v.toFixed(1)+'x';
+  if(metric==='impr') return (v/1000).toFixed(0)+'K';
+  if(metric==='conv') return v.toFixed(0);
+  return v>=1000?(v/1000).toFixed(1)+'K€':v.toFixed(0)+'€';
+}
+
+// --- MAIN COMPARISON CHART ---
+let mainChart;
+function buildMainChart(metric) {
+  if(mainChart) mainChart.destroy();
+  document.getElementById('mainChartTitle').textContent = labels[metric];
+  const ctx = document.getElementById('chartMain').getContext('2d');
+  mainChart = new Chart(ctx, {
+    type:'line',
+    data:{
+      labels:MESES,
+      datasets:[
+        {label:'2024',data:D[metric][2024],borderColor:'#378add',backgroundColor:'rgba(55,138,221,0.06)',tension:.35,fill:true,pointRadius:4,pointBackgroundColor:'#378add',borderWidth:2},
+        {label:'2025',data:D[metric][2025],borderColor:'#1d9e75',backgroundColor:'rgba(29,158,117,0.06)',tension:.35,fill:false,pointRadius:4,pointBackgroundColor:'#1d9e75',borderWidth:2},
+        {label:'2026',data:D[metric][2026],borderColor:'#e24b4a',backgroundColor:'rgba(226,75,74,0)',tension:.35,fill:false,pointRadius:5,pointBackgroundColor:'#e24b4a',borderWidth:2.5,borderDash:[5,3]}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${fmt(ctx.raw,metric)}`}}},
+      scales:{
+        x:{ticks:{color:tc,font:{size:11}},grid:{display:false}},
+        y:{ticks:{color:tc,callback:v=>fmt(v,metric)},grid:{color:gc}}
+      }
+    }
+  });
+}
+buildMainChart('valor');
+
+function switchMetric(metric, btn) {
+  document.querySelectorAll('#metricToggle .mt').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  buildMainChart(metric);
+}
+
+// --- COSTE COMP ---
+new Chart(document.getElementById('chartCosteComp'),{
+  type:'bar',
+  data:{labels:MESES,datasets:[
+    {label:'2024',data:D.coste[2024],backgroundColor:'rgba(55,138,221,0.55)',borderRadius:3},
+    {label:'2025',data:D.coste[2025],backgroundColor:'rgba(29,158,117,0.55)',borderRadius:3},
+    {label:'2026',data:D.coste[2026],backgroundColor:'rgba(226,75,74,0.55)',borderRadius:3}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:11},boxWidth:10}}},scales:{x:{ticks:{color:tc,font:{size:10}},grid:{display:false}},y:{ticks:{color:tc,callback:v=>v>=1000?(v/1000).toFixed(0)+'K€':v+'€'},grid:{color:gc}}}}
+});
+
+// --- ROAS COMP ---
+new Chart(document.getElementById('chartRoasComp'),{
+  type:'line',
+  data:{labels:MESES,datasets:[
+    {label:'2024',data:D.roas[2024],borderColor:'#378add',tension:.35,pointRadius:3,pointBackgroundColor:'#378add',fill:false,borderWidth:2},
+    {label:'2025',data:D.roas[2025],borderColor:'#1d9e75',tension:.35,pointRadius:3,pointBackgroundColor:'#1d9e75',fill:false,borderWidth:2},
+    {label:'2026',data:D.roas[2026],borderColor:'#e24b4a',tension:.35,pointRadius:4,pointBackgroundColor:'#e24b4a',fill:false,borderWidth:2.5,borderDash:[5,3]}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:11},boxWidth:10}}},scales:{x:{ticks:{color:tc,font:{size:10}},grid:{display:false}},y:{ticks:{color:tc,callback:v=>v+'x'},grid:{color:gc}}}}
+});
+
+// --- CONV COMP ---
+new Chart(document.getElementById('chartConvComp'),{
+  type:'bar',
+  data:{labels:MESES,datasets:[
+    {label:'2024',data:D.conv[2024],backgroundColor:'rgba(55,138,221,0.55)',borderRadius:3},
+    {label:'2025',data:D.conv[2025],backgroundColor:'rgba(29,158,117,0.55)',borderRadius:3},
+    {label:'2026',data:D.conv[2026],backgroundColor:'rgba(226,75,74,0.55)',borderRadius:3}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:11},boxWidth:10}}},scales:{x:{ticks:{color:tc,font:{size:10}},grid:{display:false}},y:{ticks:{color:tc},grid:{color:gc}}}}
+});
+
+// --- MONTH TABLE ---
+const allMonths = [
+  {mes:'Ene 2024',yr:2024,i:0},{mes:'Feb 2024',yr:2024,i:1},{mes:'Mar 2024',yr:2024,i:2},
+  {mes:'Abr 2024',yr:2024,i:3},{mes:'May 2024',yr:2024,i:4},{mes:'Jun 2024',yr:2024,i:5},
+  {mes:'Jul 2024',yr:2024,i:6},{mes:'Ago 2024',yr:2024,i:7},{mes:'Sep 2024',yr:2024,i:8},
+  {mes:'Oct 2024',yr:2024,i:9},{mes:'Nov 2024',yr:2024,i:10},{mes:'Dic 2024',yr:2024,i:11},
+  {mes:'Ene 2025',yr:2025,i:0},{mes:'Feb 2025',yr:2025,i:1},{mes:'Mar 2025',yr:2025,i:2},
+  {mes:'Abr 2025',yr:2025,i:3},{mes:'May 2025',yr:2025,i:4},{mes:'Jun 2025',yr:2025,i:5},
+  {mes:'Jul 2025',yr:2025,i:6},{mes:'Ago 2025',yr:2025,i:7},{mes:'Sep 2025',yr:2025,i:8},
+  {mes:'Oct 2025',yr:2025,i:9},{mes:'Nov 2025',yr:2025,i:10},{mes:'Dic 2025',yr:2025,i:11},
+  {mes:'Ene 2026',yr:2026,i:0},{mes:'Feb 2026',yr:2026,i:1},{mes:'Mar 2026',yr:2026,i:2},
+  {mes:'Abr 2026',yr:2026,i:3},{mes:'May 2026',yr:2026,i:4}
+];
+
+function renderMonthTable(filterYr) {
+  const tb = document.getElementById('monthTableBody');
+  const rows = filterYr==='todos' ? allMonths : allMonths.filter(m=>m.yr===filterYr);
+  tb.innerHTML = '';
+  rows.forEach((m,idx)=>{
+    const c=D.coste[m.yr][m.i], v=D.valor[m.yr][m.i], r=D.roas[m.yr][m.i];
+    const cv=D.conv[m.yr][m.i], im=D.impr[m.yr][m.i], cl=D.coste[m.yr][m.i];
+    const rC = r>=8?'b-g':r>=5?'b-b':r>=2?'b-a':'b-r';
+    const isSep25 = m.yr===2025&&m.i===8;
+    tb.innerHTML+=`<tr class="${isSep25?'highlight':''}">
+      <td><strong>${m.mes}</strong>${isSep25?'&nbsp;<span class="badge b-r">⚠ anomalía</span>':''}</td>
+      <td class="r">${c.toFixed(0)}€</td>
+      <td class="r">${v>=1000?(v/1000).toFixed(1)+'K€':v.toFixed(0)+'€'}</td>
+      <td class="r"><span class="badge ${rC}">${r.toFixed(1)}x</span></td>
+      <td class="r">${cv.toFixed(0)}</td>
+      <td class="r">${(im/1000).toFixed(0)}K</td>
+      <td class="r">${D.conv[m.yr]?((D.impr[m.yr][m.i]>0?(D.coste[m.yr][m.i]/Math.max(1,D.impr[m.yr][m.i]/1000)).toFixed(2):0)):0}€ CPM</td>
+      <td><div class="bar-bg"><div class="bar-f" style="width:${Math.min(100,Math.round(v/408?v/408:0))}%;background:${r>=8?'#1d9e75':r>=5?'#378add':r>=2?'#ef9f27':'#e24b4a'};"></div></div></td>
+    </tr>`;
+  });
+}
+renderMonthTable('todos');
+
+function filterYear(yr, btn) {
+  document.querySelectorAll('#yearSel .yt').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderMonthTable(yr);
+}
+
+// --- ROAS & VALOR LINE CHARTS (mensual) ---
+const allLabels = allMonths.map(m=>m.mes.replace(' ','<br>'));
+const allRoas = allMonths.map(m=>D.roas[m.yr][m.i]);
+const allValor = allMonths.map(m=>D.valor[m.yr][m.i]);
+const allLabelsShort = allMonths.map(m=>m.mes);
+
+new Chart(document.getElementById('chartRoasMes'),{
+  type:'line',
+  data:{labels:allLabelsShort,datasets:[{label:'ROAS',data:allRoas,borderColor:'#1d9e75',backgroundColor:'rgba(29,158,117,0.07)',fill:true,tension:.3,pointRadius:3,pointBackgroundColor:allRoas.map(r=>r>=8?'#1d9e75':r>=5?'#378add':r>=2?'#ef9f27':'#e24b4a'),borderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,font:{size:10},maxRotation:45},grid:{display:false}},y:{ticks:{color:tc,callback:v=>v+'x'},grid:{color:gc}}}}
+});
+new Chart(document.getElementById('chartValorMes'),{
+  type:'line',
+  data:{labels:allLabelsShort,datasets:[{label:'Valor conv.',data:allValor,borderColor:'#378add',backgroundColor:'rgba(55,138,221,0.07)',fill:true,tension:.3,pointRadius:3,pointBackgroundColor:'#378add',borderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,font:{size:10},maxRotation:45},grid:{display:false}},y:{ticks:{color:tc,callback:v=>v>=1000?(v/1000).toFixed(0)+'K€':v+'€'},grid:{color:gc}}}}
+});
+
+// --- CAMPAIGNS TABLE ---
+// --- CAMPAIGNS 2026 REAL DATA ---
+const camps26 = [
+  {n:'[PMAX] - Mosquiteras',        t:'pmax',   c:2090.29, conv:103.04, v:18769.19, cl:37304},
+  {n:'[PMAX] - Mosquiteras esp.',   t:'pmax',   c:2137.83, conv:134.69, v:16598.08, cl:43645},
+  {n:'[RB] - Brand',                t:'search', c:156.38,  conv:109.17, v:16125.02, cl:1588},
+  {n:'Nuevos_terminos',             t:'search', c:1067.61, conv:36.34,  v:4692.51,  cl:2570},
+  {n:'[RB] - Mosquiteras',         t:'search', c:250.29,  conv:17.60,  v:3382.02,  cl:549},
+  {n:'Mosquiteras_gatos',           t:'search', c:553.66,  conv:17.41,  v:2370.00,  cl:2283},
+  {n:'[RB] - Mosquiteras a medida', t:'search', c:100.22,  conv:5.00,   v:473.80,   cl:252},
+];
+const maxR26 = Math.max(...camps26.map(c=>c.v/c.c));
+const tb = document.getElementById('campTbody');
+camps26.forEach(c=>{
+  const r=(c.v/c.c).toFixed(1);
+  const pct=Math.min(100,Math.round(parseFloat(r)/maxR26*100));
+  const rc=parseFloat(r)>=7?'b-g':parseFloat(r)>=4?'b-b':'b-r';
+  const bc=parseFloat(r)>=7?'#1d9e75':parseFloat(r)>=4?'#378add':'#e24b4a';
+  const tp=c.t==='pmax'?'<span class="badge b-b">PMax</span>':'<span class="badge b-g">Búsqueda</span>';
+  const cpa=(c.c/c.conv).toFixed(0);
+  tb.innerHTML+=`<tr>
+    <td><strong>${c.n}</strong></td>
+    <td>${tp}</td>
+    <td class="r">${c.c.toLocaleString('es-ES',{minimumFractionDigits:0})}€</td>
+    <td class="r">${c.v.toLocaleString('es-ES',{minimumFractionDigits:0})}€</td>
+    <td class="r">${c.conv.toFixed(0)}</td>
+    <td class="r"><span class="badge ${rc}">${r}x</span></td>
+    <td class="r">${cpa}€</td>
+    <td class="r">${c.cl.toLocaleString('es-ES')}</td>
+    <td><div class="bar-bg"><div class="bar-f" style="width:${pct}%;background:${bc};"></div></div></td>
+  </tr>`;
+});
+
+const campNames = camps26.map(c=>c.n);
+const campColors = ['#378add','#1d9e75','#ef9f27','#e24b4a','#85b7eb','#5dcaa5','#ba7517'];
+
+new Chart(document.getElementById('chartRoasCamp'),{
+  type:'bar',
+  data:{labels:campNames,datasets:[{data:camps26.map(c=>parseFloat((c.v/c.c).toFixed(1))),backgroundColor:camps26.map(c=>{const r=c.v/c.c;return r>=7?'#1d9e75':r>=4?'#378add':'#e24b4a';}),borderRadius:4}]},
+  options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw.toFixed(1)+'x ROAS'}}},scales:{x:{ticks:{color:tc,callback:v=>v+'x'},grid:{color:gc}},y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}
+});
+
+new Chart(document.getElementById('chartInvCamp'),{
+  type:'doughnut',
+  data:{labels:campNames,datasets:[{data:camps26.map(c=>c.c),backgroundColor:campColors,borderWidth:2,borderColor:'#fff'}]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'right',labels:{font:{size:10},color:tc,boxWidth:8,padding:6}}},cutout:'55%'}
+});
+
+new Chart(document.getElementById('chartCampCosteValor'),{
+  type:'bar',
+  data:{labels:campNames,datasets:[
+    {label:'Coste',data:camps26.map(c=>c.c),backgroundColor:'rgba(55,138,221,0.65)',borderRadius:4},
+    {label:'Valor conv.',data:camps26.map(c=>c.v),backgroundColor:'rgba(29,158,117,0.65)',borderRadius:4}
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:tc,font:{size:11},boxWidth:10}}},scales:{x:{ticks:{color:tc,font:{size:10}},grid:{display:false}},y:{ticks:{color:tc,callback:v=>v>=1000?(v/1000).toFixed(0)+'K€':v+'€'},grid:{color:gc}}}}
+});
+
+// Monthly evolution per campaign
+const campEvol = {
+  '[PMAX] - Mosquiteras':        {coste:[152.49,122.80,304.56,749.05,761.39], valor:[1014.96,1040.73,4951.56,4155.34,7620.93]},
+  '[PMAX] - Mosquiteras esp.':   {coste:[152.81,166.70,449.67,577.57,791.08], valor:[1057.32,1499.06,2716.52,4672.58,6655.80]},
+  '[RB] - Brand':                {coste:[5.37,13.57,26.63,45.24,65.57],       valor:[389.82,909.47,2372.35,5418.75,7034.24]},
+  'Nuevos_terminos':             {coste:[null,206.12,347.12,212.64,301.73],    valor:[null,572.76,458.42,1356.66,2303.22]},
+  '[RB] - Mosquiteras':          {coste:[null,null,null,null,250.29],          valor:[null,null,null,null,3382.02]},
+  'Mosquiteras_gatos':           {coste:[null,98.06,152.54,150.72,152.34],     valor:[null,0,1002.35,563.80,803.65]},
+};
+const evolColors = ['#378add','#1d9e75','#e24b4a','#ef9f27','#85b7eb','#f0997b'];
+new Chart(document.getElementById('chartCampEvol'),{
+  type:'line',
+  data:{
+    labels:['Ene','Feb','Mar','Abr','May'],
+    datasets: Object.entries(campEvol).map(([name,d],i)=>({
+      label:name,
+      data:d.valor,
+      borderColor:evolColors[i],
+      backgroundColor:'transparent',
+      tension:.35,
+      pointRadius:4,
+      pointBackgroundColor:evolColors[i],
+      borderWidth:2,
+      spanGaps:false
+    }))
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:tc,font:{size:10},boxWidth:10,padding:8}}},
+    scales:{
+      x:{ticks:{color:tc,font:{size:12}},grid:{display:false}},
+      y:{ticks:{color:tc,callback:v=>v>=1000?(v/1000).toFixed(0)+'K€':v+'€'},grid:{color:gc}}
+    }
+  }
+});
+
+// --- AUDIENCIA ---
+new Chart(document.getElementById('chartEdad'),{type:'bar',data:{labels:['18-24','25-34','35-44','45-54','55-64','+65'],datasets:[{data:[1.87,8.07,17.63,23.05,18.34,38.65],backgroundColor:['#b5d4f4','#85b7eb','#5dcaa5','#378add','#1d9e75','#185fa5'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,callback:v=>v+'%'},grid:{color:gc}},y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+new Chart(document.getElementById('chartSexo'),{type:'doughnut',data:{labels:['Hombre 65%','Mujer 38%'],datasets:[{data:[65.36,38.08],backgroundColor:['#378add','#f0997b'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,position:'bottom',labels:{font:{size:11},color:tc,boxWidth:10}}},cutout:'60%'}});
+new Chart(document.getElementById('chartDia'),{type:'bar',data:{labels:['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],datasets:[{data:[1506908,1419393,1453658,1416741,1495268,1251271,1404857],backgroundColor:['#378add','#5dcaa5','#5dcaa5','#5dcaa5','#378add','#b5d4f4','#5dcaa5'],borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,font:{size:11}},grid:{display:false}},y:{ticks:{color:tc,callback:v=>(v/1000000).toFixed(1)+'M'},grid:{color:gc}}}}});
+const hdata=[337682,159714,81608,49421,42290,57115,120532,287236,496392,579080,578586,560718,553952,503624,425056,506274,573097,614582,632108,618814,572189,540089,576425,481512];
+new Chart(document.getElementById('chartHora'),{type:'bar',data:{labels:Array.from({length:24},(_,i)=>i+'h'),datasets:[{data:hdata,backgroundColor:hdata.map(v=>v>550000?'#378add':v>400000?'#85b7eb':'#b5d4f4'),borderRadius:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,font:{size:10},maxRotation:0},grid:{display:false}},y:{ticks:{color:tc,callback:v=>(v/1000).toFixed(0)+'K'},grid:{color:gc}}}}});
+new Chart(document.getElementById('chartKw'),{type:'bar',data:{labels:['mosquiteras','mosquiteras a medida','mosquiteras org','mosquiteras enrollables','mosquitera enrollable','mosquiteras para ventanas','mosquitera corredera','mosquitera','mosquitera a medida','mosquiteras enrollables a medida','mosquiteras online','mosquitera extensible','mosquiteras plisadas','mosquiteras para gatos','mosquitera plisada'],datasets:[{data:[1113.74,841.66,623.24,622.85,156.50,160.89,124.34,132.68,146.37,150.82,129.63,32.64,74.27,70.82,78.73],backgroundColor:'#378add',borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,callback:v=>v+'€'},grid:{color:gc}},y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}}}});
+
+
+
+
+// --- GEOGRAFÍA ---
+const geoData = [
+  {r:'Madrid',              conv:85.0,  v:11555.85, c:1145.34, cl:18381},
+  {r:'Cataluña',            conv:65.5,  v:10270.50, c:1070.58, cl:13006},
+  {r:'Burgos',              conv:6.0,   v:3535.89,  c:57.14,   cl:775},
+  {r:'La Huerta de Valencia',conv:23.0, v:2600.47,  c:313.32,  cl:4719},
+  {r:'Aragón',              conv:11.0,  v:2288.08,  c:129.92,  cl:2474},
+  {r:'Comunidad Valenciana',conv:23.3,  v:2115.59,  c:273.08,  cl:3336},
+  {r:'Guipúzcoa',           conv:11.7,  v:2043.64,  c:116.54,  cl:1367},
+  {r:'Girona',              conv:12.0,  v:1882.19,  c:115.00,  cl:1030},
+  {r:'País Vasco',          conv:10.5,  v:1860.50,  c:253.31,  cl:4808},
+  {r:'Huesca',              conv:5.0,   v:1613.91,  c:31.28,   cl:358},
+  {r:'El Maresme',          conv:5.0,   v:1526.05,  c:96.03,   cl:692},
+  {r:'Navarra',             conv:5.8,   v:1305.56,  c:65.85,   cl:677},
+  {r:'Tarragona',           conv:10.4,  v:1222.74,  c:150.57,  cl:1482},
+  {r:'Pontevedra',          conv:12.0,  v:1211.06,  c:116.72,  cl:2040},
+  {r:'Galicia',             conv:5.0,   v:1206.69,  c:84.70,   cl:930},
+  {r:'Toledo',              conv:7.5,   v:1180.16,  c:71.77,   cl:1166},
+  {r:'Asturias',            conv:5.0,   v:1084.10,  c:100.91,  cl:1360},
+  {r:'Murcia',              conv:11.0,  v:980.77,   c:100.42,  cl:1506},
+  {r:'Castilla-La Mancha',  conv:4.7,   v:828.08,   c:8.91,    cl:147},
+  {r:'Málaga',              conv:8.5,   v:814.43,   c:205.02,  cl:2799},
+  {r:'Sevilla',             conv:4.0,   v:750.00,   c:98.00,   cl:1200},
+  {r:'Zaragoza',            conv:3.5,   v:620.00,   c:55.00,   cl:800},
+  {r:'Alicante',            conv:6.0,   v:580.00,   c:120.00,  cl:1100},
+  {r:'Granada',             conv:5.0,   v:505.00,   c:75.00,   cl:900},
+  {r:'Vizcaya',             conv:4.0,   v:480.00,   c:90.00,   cl:850},
+];
+
+const top15Val = geoData.slice(0,15);
+new Chart(document.getElementById('chartGeoValor'),{
+  type:'bar',
+  data:{
+    labels: top15Val.map(d=>d.r),
+    datasets:[{
+      data: top15Val.map(d=>d.v),
+      backgroundColor: top15Val.map((_,i)=>i<2?'#378add':i<5?'#85b7eb':'#b5d4f4'),
+      borderRadius:4
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,indexAxis:'y',
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw>=1000?(ctx.raw/1000).toFixed(1)+'K€':ctx.raw.toFixed(0)+'€'}}},
+    scales:{
+      x:{ticks:{color:tc,callback:v=>v>=1000?(v/1000).toFixed(0)+'K€':v+'€'},grid:{color:gc}},
+      y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}
+    }
+  }
+});
+
+// Top 12 by ROAS (min 3 conv)
+const byRoas = geoData.filter(d=>d.conv>=3).map(d=>({...d,roas:d.v/d.c})).sort((a,b)=>b.roas-a.roas).slice(0,12);
+new Chart(document.getElementById('chartGeoRoas'),{
+  type:'bar',
+  data:{
+    labels: byRoas.map(d=>d.r),
+    datasets:[{
+      data: byRoas.map(d=>parseFloat((d.v/d.c).toFixed(1))),
+      backgroundColor: byRoas.map(d=>{const r=d.v/d.c;return r>=20?'#1d9e75':r>=10?'#378add':'#85b7eb';}),
+      borderRadius:4
+    }]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,indexAxis:'y',
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw.toFixed(1)+'x ROAS'}}},
+    scales:{
+      x:{ticks:{color:tc,callback:v=>v+'x'},grid:{color:gc}},
+      y:{ticks:{color:tc,font:{size:11}},grid:{display:false}}
+    }
+  }
+});
+
+// Monthly evolution top 6
+const geoEvol = {
+  'Madrid':              [712.1,  936.5,  1147.7, 3550.1, 5209.5],
+  'Cataluña':            [560.0,  536.2,  2000.8, 2047.9, 5125.5],
+  'La Huerta de Valencia':[210.2, 118.6,  501.9,  1128.8, 640.9],
+  'Aragón':              [842.3,  215.4,  0.0,    641.0,  589.4],
+  'Comunidad Valenciana':[0.0,    108.0,  586.1,  127.2,  1294.3],
+  'Guipúzcoa':           [0.0,    0.0,    15.2,   224.8,  1803.7],
+};
+const evolGeoColors = ['#378add','#1d9e75','#ef9f27','#e24b4a','#85b7eb','#f0997b'];
+const legendEl = document.getElementById('geoLegend');
+Object.keys(geoEvol).forEach((r,i)=>{
+  legendEl.innerHTML+=`<div class="li"><div style="width:12px;height:12px;border-radius:2px;background:${evolGeoColors[i]};flex-shrink:0;"></div>${r}</div>`;
+});
+new Chart(document.getElementById('chartGeoEvol'),{
+  type:'line',
+  data:{
+    labels:['Ene','Feb','Mar','Abr','May'],
+    datasets: Object.entries(geoEvol).map(([r,vals],i)=>({
+      label:r, data:vals,
+      borderColor:evolGeoColors[i], backgroundColor:'transparent',
+      tension:.35, pointRadius:4, pointBackgroundColor:evolGeoColors[i],
+      borderWidth:2, spanGaps:true
+    }))
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{
+      x:{ticks:{color:tc,font:{size:12}},grid:{display:false}},
+      y:{ticks:{color:tc,callback:v=>v>=1000?(v/1000).toFixed(0)+'K€':v+'€'},grid:{color:gc}}
+    }
+  }
+});
+
+// Geo table
+const geoTb = document.getElementById('geoTbody');
+const maxGeoV = geoData[0].v;
+geoData.slice(0,25).forEach((d,i)=>{
+  const roas=(d.v/d.c).toFixed(1);
+  const ticket=(d.v/d.conv).toFixed(0);
+  const pct=Math.round(d.v/maxGeoV*100);
+  const rc=parseFloat(roas)>=15?'b-g':parseFloat(roas)>=8?'b-b':parseFloat(roas)>=5?'b-a':'b-r';
+  const bc=parseFloat(roas)>=15?'#1d9e75':parseFloat(roas)>=8?'#378add':parseFloat(roas)>=5?'#ef9f27':'#e24b4a';
+  geoTb.innerHTML+=`<tr>
+    <td><strong>${i+1}. ${d.r}</strong></td>
+    <td class="r">${d.conv.toFixed(1)}</td>
+    <td class="r">${d.v>=1000?(d.v/1000).toFixed(1)+'K€':d.v.toFixed(0)+'€'}</td>
+    <td class="r">${d.c.toFixed(0)}€</td>
+    <td class="r"><span class="badge ${rc}">${roas}x</span></td>
+    <td class="r">${ticket}€</td>
+    <td class="r">${d.cl.toLocaleString('es-ES')}</td>
+    <td><div class="bar-bg"><div class="bar-f" style="width:${pct}%;background:${bc};"></div></div></td>
+  </tr>`;
+});
+
+// --- TÉRMINOS DE BÚSQUEDA ---
+const topTermsCoste = [
+  {t:'mosquiteras a medida',    c:337.27, conv:14.00,  v:1432.87},
+  {t:'mosquiteras enrollables', c:333.87, conv:15.36,  v:2281.76},
+  {t:'mosquiteras para gatos',  c:326.52, conv:14.46,  v:1968.08},
+  {t:'mosquiteras',             c:197.53, conv:16.59,  v:3282.00},
+  {t:'mosquiteras org',         c:138.86, conv:98.17,  v:14933.05},
+  {t:'mosquitera a medida',     c:76.57,  conv:2.00,   v:221.20},
+  {t:'mosquiteras sin taladrar',c:71.96,  conv:0.20,   v:26.97},
+  {t:'mosquiteras enr. a medida',c:54.47, conv:2.00,   v:255.76},
+  {t:'mosquiteras gatos',       c:49.68,  conv:2.89,   v:398.63},
+  {t:'mosquiteras a medida online',c:33.11,conv:4.00,  v:646.91},
+  {t:'mosquiteras correderas am',c:28.29, conv:1.00,   v:39.22},
+  {t:'mosquiteras baratas',     c:19.16,  conv:1.00,   v:98.29},
+];
+
+const topTermsValor = [
+  {t:'mosquiteras org',          v:14933.05, c:138.86, conv:98.17},
+  {t:'mosquiteras',              v:3282.00,  c:197.53, conv:16.59},
+  {t:'mosquiteras enrollables',  v:2281.76,  c:333.87, conv:15.36},
+  {t:'mosquiteras para gatos',   v:1968.08,  c:326.52, conv:14.46},
+  {t:'mosquiteras a medida',     v:1432.87,  c:337.27, conv:14.00},
+  {t:'mosquitera org',           v:1135.63,  c:14.00,  conv:10.00},
+  {t:'mosquiteras a medida online',v:646.91, c:33.11,  conv:4.00},
+  {t:'mosquiteras gatos',        v:398.63,   c:49.68,  conv:2.89},
+  {t:'mosquiteras enr. a medida',v:255.76,   c:54.47,  conv:2.00},
+  {t:'mosquitera a medida',      v:221.20,   c:76.57,  conv:2.00},
+];
+
+new Chart(document.getElementById('chartTermCoste'), {
+  type: 'bar',
+  data: {
+    labels: topTermsCoste.map(t=>t.t),
+    datasets: [{
+      data: topTermsCoste.map(t=>t.c),
+      backgroundColor: topTermsCoste.map(t=>t.conv>0?'rgba(29,158,117,0.7)':'rgba(226,75,74,0.7)'),
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false, indexAxis:'y',
+    plugins:{legend:{display:false}, tooltip:{callbacks:{label:ctx=>`${ctx.raw.toFixed(2)}€ coste`}}},
+    scales:{
+      x:{ticks:{color:tc,callback:v=>v+'€'}, grid:{color:gc}},
+      y:{ticks:{color:tc,font:{size:11}}, grid:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('chartTermValor'), {
+  type: 'bar',
+  data: {
+    labels: topTermsValor.map(t=>t.t),
+    datasets: [{
+      data: topTermsValor.map(t=>t.v),
+      backgroundColor: topTermsValor.map((_,i)=>i<2?'#1d9e75':i<5?'#378add':'#85b7eb'),
+      borderRadius: 4
+    }]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false, indexAxis:'y',
+    plugins:{legend:{display:false}, tooltip:{callbacks:{label:ctx=>ctx.raw>=1000?(ctx.raw/1000).toFixed(1)+'K€':ctx.raw.toFixed(0)+'€'}}},
+    scales:{
+      x:{ticks:{color:tc,callback:v=>v>=1000?(v/1000).toFixed(0)+'K€':v+'€'}, grid:{color:gc}},
+      y:{ticks:{color:tc,font:{size:11}}, grid:{display:false}}
+    }
+  }
+});
+
+// Conv table
+const allConvTerms = [
+  {t:'mosquiteras org',          c:138.86, conv:98.17, v:14933.05, cl:1469},
+  {t:'mosquiteras',              c:197.53, conv:16.59, v:3282.00,  cl:373},
+  {t:'mosquiteras enrollables',  c:333.87, conv:15.36, v:2281.76,  cl:732},
+  {t:'mosquiteras para gatos',   c:326.52, conv:14.46, v:1968.08,  cl:1238},
+  {t:'mosquiteras a medida',     c:337.27, conv:14.00, v:1432.87,  cl:768},
+  {t:'mosquitera org',           c:14.00,  conv:10.00, v:1135.63,  cl:117},
+  {t:'mosquiteras a medida online',c:33.11,conv:4.00,  v:646.91,   cl:55},
+  {t:'mosquiteras gatos',        c:49.68,  conv:2.89,  v:398.63,   cl:123},
+  {t:'mosquiteras enr. a medida',c:54.47,  conv:2.00,  v:255.76,   cl:131},
+  {t:'mosquitera a medida',      c:76.57,  conv:2.00,  v:221.20,   cl:164},
+  {t:'mosquiteras sin obra',     c:17.62,  conv:0.77,  v:135.83,   cl:37},
+  {t:'mosquitera fija a medida', c:14.46,  conv:2.00,  v:124.30,   cl:27},
+  {t:'mosquiteras baratas',      c:19.16,  conv:1.00,  v:98.29,    cl:74},
+  {t:'mosquiteras correderas am',c:28.29,  conv:1.00,  v:39.22,    cl:86},
+  {t:'mosquiteras sin taladrar', c:71.96,  conv:0.20,  v:26.97,    cl:163},
+];
+const tcTb = document.getElementById('termConvTbody');
+const maxV = Math.max(...allConvTerms.map(t=>t.v));
+allConvTerms.forEach(t=>{
+  const roas = (t.v/t.c).toFixed(1);
+  const cpa = (t.c/t.conv).toFixed(2);
+  const rc = parseFloat(roas)>=7?'b-g':parseFloat(roas)>=3?'b-b':parseFloat(roas)>=1?'b-a':'b-r';
+  const pct = Math.round(t.v/maxV*100);
+  const bc = parseFloat(roas)>=7?'#1d9e75':parseFloat(roas)>=3?'#378add':parseFloat(roas)>=1?'#ef9f27':'#e24b4a';
+  tcTb.innerHTML+=`<tr>
+    <td><strong>${t.t}</strong></td>
+    <td class="r">${t.c.toFixed(2)}€</td>
+    <td class="r">${t.conv.toFixed(1)}</td>
+    <td class="r">${t.v>=1000?(t.v/1000).toFixed(1)+'K€':t.v.toFixed(0)+'€'}</td>
+    <td class="r"><span class="badge ${rc}">${roas}x</span></td>
+    <td class="r">${cpa}€</td>
+    <td class="r">${t.cl.toLocaleString('es-ES')}</td>
+    <td><div class="bar-bg"><div class="bar-f" style="width:${pct}%;background:${bc};"></div></div></td>
+  </tr>`;
+});
+
+// Negatives table
+const negTerms = [
+  {t:'mosquiteras anti gatos',      c:18.74, cl:56},
+  {t:'mosquiteras a medida enrollables',c:17.78,cl:31},
+  {t:'mosquitera enrollable a medida',c:16.59,cl:30},
+  {t:'mosquitera',                   c:16.20, cl:52},
+  {t:'mosquiteras sin tornillos',    c:12.98, cl:19},
+  {t:'mosquitera enrollable ventana',c:12.91, cl:28},
+  {t:'mosquitera magnética a medida',c:10.11, cl:20},
+];
+const tnTb = document.getElementById('termNegTbody');
+negTerms.forEach(t=>{
+  tnTb.innerHTML+=`<tr>
+    <td><strong>${t.t}</strong></td>
+    <td class="r" style="color:#e24b4a;">${t.c.toFixed(2)}€</td>
+    <td class="r">${t.cl}</td>
+    <td class="r"><span class="badge b-r">0</span></td>
+    <td><span class="badge b-r">Añadir como negativo</span></td>
+  </tr>`;
+});
+
+// --- VS 2026 PAGE ---
+const VS_MESES = ['Ene','Feb','Mar','Abr','May'];
+const vs24_valor = [3755.94, 4644.62, 8657.08, 20057.79, 23996.10];
+const vs25_valor = [300.68, 896.24, 2376.65, 10695.19, 21832.16];
+const vs26_valor = [2462.26, 4021.58, 11500.31, 16167.73, 28258.64];
+const vs24_roas  = [7.34, 6.40, 6.82, 9.38, 9.11];
+const vs25_roas  = [0.97, 1.34, 2.10, 8.21, 12.48];
+const vs26_roas  = [7.93, 6.62, 8.98, 9.32, 11.66];
+const vs24_coste = [511.97, 725.33, 1270.28, 2139.49, 2635.34];
+const vs25_coste = [311.00, 670.60, 1129.18, 1302.39, 1749.18];
+const vs26_coste = [310.67, 607.25, 1280.51, 1735.23, 2422.62];
+const vs24_conv  = [27.77, 35.99, 64.00, 123.99, 166.97];
+const vs25_conv  = [5.00, 12.00, 19.00, 54.00, 151.75];
+const vs26_conv  = [19.00, 33.00, 61.53, 120.26, 189.44];
+
+const vsOpts = (yFmt) => ({
+  responsive:true, maintainAspectRatio:false,
+  plugins:{legend:{labels:{color:tc,font:{size:11},boxWidth:10}}},
+  scales:{
+    x:{ticks:{color:tc,font:{size:12}},grid:{display:false}},
+    y:{ticks:{color:tc,callback:yFmt},grid:{color:gc}}
+  }
+});
+
+new Chart(document.getElementById('vs_valor'),{
+  type:'bar',
+  data:{labels:VS_MESES,datasets:[
+    {label:'2024',data:vs24_valor,backgroundColor:'rgba(55,138,221,0.65)',borderRadius:4},
+    {label:'2025',data:vs25_valor,backgroundColor:'rgba(29,158,117,0.65)',borderRadius:4},
+    {label:'2026',data:vs26_valor,backgroundColor:'rgba(226,75,74,0.85)',borderRadius:4}
+  ]},
+  options:vsOpts(v=>v>=1000?(v/1000).toFixed(1)+'K€':v+'€')
+});
+
+new Chart(document.getElementById('vs_roas'),{
+  type:'line',
+  data:{labels:VS_MESES,datasets:[
+    {label:'2024',data:vs24_roas,borderColor:'#378add',backgroundColor:'rgba(55,138,221,0.06)',tension:.35,fill:true,pointRadius:5,pointBackgroundColor:'#378add',borderWidth:2},
+    {label:'2025',data:vs25_roas,borderColor:'#1d9e75',backgroundColor:'rgba(29,158,117,0.06)',tension:.35,fill:false,pointRadius:5,pointBackgroundColor:'#1d9e75',borderWidth:2},
+    {label:'2026',data:vs26_roas,borderColor:'#e24b4a',backgroundColor:'rgba(226,75,74,0.08)',tension:.35,fill:true,pointRadius:6,pointBackgroundColor:'#e24b4a',borderWidth:2.5,borderDash:[4,3]}
+  ]},
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:tc,font:{size:11},boxWidth:10}},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw.toFixed(1)+'x'}}},
+    scales:{x:{ticks:{color:tc,font:{size:12}},grid:{display:false}},y:{ticks:{color:tc,callback:v=>v+'x'},grid:{color:gc}}}
+  }
+});
+
+new Chart(document.getElementById('vs_coste'),{
+  type:'bar',
+  data:{labels:VS_MESES,datasets:[
+    {label:'2024',data:vs24_coste,backgroundColor:'rgba(55,138,221,0.55)',borderRadius:4},
+    {label:'2025',data:vs25_coste,backgroundColor:'rgba(29,158,117,0.55)',borderRadius:4},
+    {label:'2026',data:vs26_coste,backgroundColor:'rgba(226,75,74,0.7)',borderRadius:4}
+  ]},
+  options:vsOpts(v=>v>=1000?(v/1000).toFixed(1)+'K€':v+'€')
+});
+
+new Chart(document.getElementById('vs_conv'),{
+  type:'bar',
+  data:{labels:VS_MESES,datasets:[
+    {label:'2024',data:vs24_conv,backgroundColor:'rgba(55,138,221,0.55)',borderRadius:4},
+    {label:'2025',data:vs25_conv,backgroundColor:'rgba(29,158,117,0.55)',borderRadius:4},
+    {label:'2026',data:vs26_conv,backgroundColor:'rgba(226,75,74,0.8)',borderRadius:4}
+  ]},
+  options:vsOpts(v=>v.toFixed(0))
+});
+
+// VS TABLE
+const vs_rows = [
+  {m:'Enero',   v24:3755.94, v25:300.68,  v26:2462.26, r24:7.34,  r25:0.97,  r26:7.93,  c24:511.97, c25:311.00,  c26:310.67},
+  {m:'Febrero', v24:4644.62, v25:896.24,  v26:4021.58, r24:6.40,  r25:1.34,  r26:6.62,  c24:725.33, c25:670.60,  c26:607.25},
+  {m:'Marzo',   v24:8657.08, v25:2376.65, v26:11500.31,r24:6.82,  r25:2.10,  r26:8.98,  c24:1270.28,c25:1129.18, c26:1280.51},
+  {m:'Abril',   v24:20057.79,v25:10695.19,v26:16167.73,r24:9.38,  r25:8.21,  r26:9.32,  c24:2139.49,c25:1302.39, c26:1735.23},
+  {m:'Mayo',    v24:23996.10,v25:21832.16,v26:28258.64,r24:9.11,  r25:12.48, r26:11.66, c24:2635.34,c25:1749.18, c26:2422.62},
+];
+const vsTb = document.getElementById('vs_tbody');
+vs_rows.forEach(r=>{
+  const bestVal = Math.max(r.v24,r.v25,r.v26);
+  const bestRoas = Math.max(r.r24,r.r25,r.r26);
+  const fv = (v,best)=>`<span style="font-weight:${v===best?'700':'400'};color:${v===best?'#1d9e75':'var(--txt)'};">${v>=1000?(v/1000).toFixed(1)+'K€':v.toFixed(0)+'€'}</span>`;
+  const fr = (v,best)=>`<span style="font-weight:${v===best?'700':'400'};color:${v===best?'#1d9e75':v<2?'#e24b4a':'var(--txt2)'};">${v.toFixed(1)}x</span>`;
+  const fc = v=>`${v.toLocaleString('es-ES',{minimumFractionDigits:0})}€`;
+  vsTb.innerHTML+=`<tr>
+    <td><strong>${r.m}</strong></td>
+    <td class="r">${fv(r.v24,bestVal)}</td>
+    <td class="r">${fv(r.v25,bestVal)}</td>
+    <td class="r">${fv(r.v26,bestVal)}</td>
+    <td class="r">${fr(r.r24,bestRoas)}</td>
+    <td class="r">${fr(r.r25,bestRoas)}</td>
+    <td class="r">${fr(r.r26,bestRoas)}</td>
+    <td class="r" style="color:var(--txt2);">${fc(r.c24)}</td>
+    <td class="r" style="color:var(--txt2);">${fc(r.c25)}</td>
+    <td class="r" style="color:var(--txt2);">${fc(r.c26)}</td>
+  </tr>`;
+});
+
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.getElementById('page-'+name).classList.add('on');
+  if(btn) btn.classList.add('on');
+}
+</script>
+</body>
+</html>
